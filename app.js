@@ -163,7 +163,11 @@ bot.dialog('HelpDialog',
 
 bot.dialog('DataPrivacy',
     (session) => {
-        session.send('You reached the DataPrivacy intent. You said \'%s\'.', session.message.text);
+
+        session.sendTyping();
+        session.send(randomPhrase(dataPrivacy));
+        
+        session.send('If you want to know more, take a look here: https://www.verti.com/conditions/');
         session.endDialog();
     }
 ).triggerAction({
