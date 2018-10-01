@@ -64,7 +64,8 @@ var VideoCardName = "Video card";
 var AudioCardName = "Audio card";
 var CardNames = [HeroCardName, ThumbnailCardName, ReceiptCardName, SigninCardName, AnimationCardName, VideoCardName, AudioCardName];
 
-const welcomeGreetings = ['hello', 'howdy', 'hi', 'good day']; // Array of items for welcome greetings
+const welcomeGreetings = ['Hello', 'Howdy', 'Hi', 'Good day']; // Array of items for welcome greetings
+const dataPrivacy = ['Security is always on my mind...', 'Dont worry I will never hold your data without permission', 'I was ready for the GDPR even before the GDPR', 'I take privacy very seriously']; // Array of items for welcome greetings
 
 
 function randomPhrase(myData) {
@@ -158,6 +159,15 @@ bot.dialog('HelpDialog',
     }
 ).triggerAction({
     matches: 'Help'
+})
+
+bot.dialog('DataPrivacy',
+    (session) => {
+        session.send('You reached the DataPrivacy intent. You said \'%s\'.', session.message.text);
+        session.endDialog();
+    }
+).triggerAction({
+    matches: 'DataPrivacy'
 })
 
 bot.dialog('CancelDialog',
