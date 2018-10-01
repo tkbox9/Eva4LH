@@ -64,6 +64,18 @@ var VideoCardName = "Video card";
 var AudioCardName = "Audio card";
 var CardNames = [HeroCardName, ThumbnailCardName, ReceiptCardName, SigninCardName, AnimationCardName, VideoCardName, AudioCardName];
 
+const welcomeGreetings = ['hello', 'howdy', 'hi', 'good day']; // Array of items for welcome greetings
+
+
+function randomPhrase(myData) {
+    var i = 0;
+    i = Math.floor(Math.random() * myData.length);
+    return (myData[i]);
+}
+
+
+
+
 
 function createCards(session) {
     return [
@@ -115,12 +127,15 @@ function createCards(session) {
 
 
 
+
+
+
 // Add a dialog for each intent that the LUIS app recognizes.
 // See https://docs.microsoft.com/en-us/bot-framework/nodejs/bot-builder-nodejs-recognize-intent-luis 
 bot.dialog('GreetingDialog',
     (session) => {
         session.sendTyping();
-
+        session.send(randomPhrase(welcomeGreetings));
 
         var cards = createCards(session);
         var msg = new builder.Message(session)
