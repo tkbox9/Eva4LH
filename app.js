@@ -52,16 +52,89 @@ const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v2.0/apps/' + luisApp
 var recognizer = new builder.LuisRecognizer(LuisModelUrl);
 bot.recognizer(recognizer);
 
+
+
+//cards
+var HeroCardName = 'Hero card';
+var ThumbnailCardName = 'Thumbnail card';
+var ReceiptCardName = 'Receipt card';
+var SigninCardName = 'Sign-in card';
+var AnimationCardName = "Animation card";
+var VideoCardName = "Video card";
+var AudioCardName = "Audio card";
+var CardNames = [HeroCardName, ThumbnailCardName, ReceiptCardName, SigninCardName, AnimationCardName, VideoCardName, AudioCardName];
+
+
+function createCards(session) {
+    return [
+        new builder.HeroCard(session)
+            .title('Azure Storage')
+            .subtitle('Offload the heavy lifting of data center management')
+            .text('Store and help protect your data. Get durable, highly available data storage across the globe and pay only for what you use.')
+            .images([
+                builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/aspnet/aspnet/overview/developing-apps-with-windows-azure/building-real-world-cloud-apps-with-windows-azure/data-storage-options/_static/image5.png')
+            ])
+            .buttons([
+                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/storage/', 'Learn More')
+            ]),
+
+        new builder.ThumbnailCard(session)
+            .title('DocumentDB')
+            .subtitle('Blazing fast, planet-scale NoSQL')
+            .text('NoSQL service for highly available, globally distributed apps—take full advantage of SQL and JavaScript over document and key-value data without the hassles of on-premises or virtual machine-based cloud database options.')
+            .images([
+                builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/azure/documentdb/media/documentdb-introduction/json-database-resources1.png')
+            ])
+            .buttons([
+                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/documentdb/', 'Learn More')
+            ]),
+
+        new builder.HeroCard(session)
+            .title('Azure Functions')
+            .subtitle('Process events with a serverless code architecture')
+            .text('An event-based serverless compute experience to accelerate your development. It can scale based on demand and you pay only for the resources you consume.')
+            .images([
+                builder.CardImage.create(session, 'https://msdnshared.blob.core.windows.net/media/2016/09/fsharp-functions2.png')
+            ])
+            .buttons([
+                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/functions/', 'Learn More')
+            ]),
+
+        new builder.ThumbnailCard(session)
+            .title('Cognitive Services')
+            .subtitle('Build powerful intelligence into your applications to enable natural and contextual interactions')
+            .text('Enable natural and contextual interaction with tools that augment users\' experiences using the power of machine-based intelligence. Tap into an ever-growing collection of powerful artificial intelligence algorithms for vision, speech, language, and knowledge.')
+            .images([
+                builder.CardImage.create(session, 'https://msdnshared.blob.core.windows.net/media/2017/03/Azure-Cognitive-Services-e1489079006258.png')
+            ])
+            .buttons([
+                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/cognitive-services/', 'Learn More')
+            ])
+    ];
+}
+
+
+
 // Add a dialog for each intent that the LUIS app recognizes.
 // See https://docs.microsoft.com/en-us/bot-framework/nodejs/bot-builder-nodejs-recognize-intent-luis 
 bot.dialog('GreetingDialog',
     (session) => {
-        session.send('You reached the Greeting intent. You said \'%s\'.', session.message.text);
+        session.sendTyping();
+
+
+        var cards = createCards(session);
+        var msg = new builder.Message(session)
+            .attachmentLayout(builder.AttachmentLayout.carousel)
+            .attachments(cards);
+
+        session.send(msg);
+       // session.send('Adam: You reached the Greeting intent. You said \'%s\'.', session.message.text);
         session.endDialog();
     }
 ).triggerAction({
     matches: 'Greeting'
 })
+
 
 bot.dialog('HelpDialog',
     (session) => {
