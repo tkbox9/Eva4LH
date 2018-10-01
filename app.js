@@ -66,6 +66,7 @@ var CardNames = [HeroCardName, ThumbnailCardName, ReceiptCardName, SigninCardNam
 
 const welcomeGreetings = ['Hello', 'Howdy', 'Hi', 'Good day']; // Array of items for welcome greetings
 const dataPrivacy = ['Security is always on my mind...', 'Dont worry I will never hold your data without permission', 'I was ready for the GDPR even before the GDPR', 'I take privacy very seriously']; // Array of items for welcome greetings
+const reightForMe = ['Dont worry, we will find the right perfect fit', 'I will give the best product ever ', 'Gotcha! We will find the best fit together']; // Array of items for welcome greetings
 
 
 function randomPhrase(myData) {
@@ -129,6 +130,33 @@ function createCards(session) {
 
 
 
+// Ask the user for their name and greet them by name.
+bot.dialog('RightForMe', [
+    function (session) {
+        session.beginDialog('aboutEva');
+    },
+    function (session, results) {
+        session.endDialog(`Hello ${results.response}!`);
+    }
+]).triggerAction({
+    matches: 'Greeting'
+});
+
+bot.dialog('aboutEva', [
+    function (session) {
+        session.sendTyping();
+        session.send(randomPhrase(reightForMe));
+        session.send('Why dont you tell me a bit about yourself?');
+        session.send('Dont be shy :D.. Oh ok, I will go first');
+        session.send('Im 34 years old, single with no kid and work as digital assitant. I enjoy skiing and deep dive in open waters :)');
+       
+        builder.Prompts.text(session, "Now is your turn... Tell me a bit about yourself?");
+    },
+    function (session, results) {
+        session.endDialogWithResult(results);
+    }
+]);
+
 
 
 // Add a dialog for each intent that the LUIS app recognizes.
@@ -144,7 +172,6 @@ bot.dialog('GreetingDialog',
             .attachments(cards);
 
         session.send(msg);
-       // session.send('Adam: You reached the Greeting intent. You said \'%s\'.', session.message.text);
         session.endDialog();
     }
 ).triggerAction({
@@ -166,13 +193,15 @@ bot.dialog('DataPrivacy',
 
         session.sendTyping();
         session.send(randomPhrase(dataPrivacy));
-        
+
         session.send('If you want to know more, take a look here: https://www.verti.com/conditions/');
         session.endDialog();
     }
 ).triggerAction({
     matches: 'DataPrivacy'
 })
+
+
 
 bot.dialog('CancelDialog',
     (session) => {
