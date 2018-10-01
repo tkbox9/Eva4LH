@@ -205,7 +205,11 @@ bot.dialog('DataPrivacy',
 
 bot.dialog('CancelDialog',
     (session) => {
-        session.send('You reached the Cancel intent. You said \'%s\'.', session.message.text);
+        session.sendTyping();
+        session.send(randomPhrase(reightForMe));
+        session.send('Why dont you tell me a bit about yourself?');
+        session.send('Dont be shy :D.. Oh ok, I will go first');
+        session.send('Im 34 years old, single with no kid and work as digital assitant. I enjoy skiing and deep dive in open waters :)');
         session.endDialog();
     }
 ).triggerAction({
